@@ -35,6 +35,7 @@ Route::post('/tokens/create', function (Request $request) {
         ]);
     }
     return response()->json([
+        'usuario' => $usu,
         'token' => $usu->createToken($request->token_name)->plainTextToken,
     ]);
 });
