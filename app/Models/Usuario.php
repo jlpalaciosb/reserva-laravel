@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Usuario extends User
 {
@@ -38,4 +39,14 @@ class Usuario extends User
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get all of the reservas for the Usuario
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function reservas(): HasMany
+    {
+        return $this->hasMany(Reserva::class, 'id_usuario', 'id');
+    }
 }

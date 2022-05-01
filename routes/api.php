@@ -26,7 +26,7 @@ Route::post('/tokens/create', function (Request $request) {
     $request->validate([
         'username' => 'required',
         'password' => 'required',
-        'token_name' => 'required',
+        'device' => 'required',
     ]);
     $usu = Usuario::where('username', $request->username)->first();
     if (! $usu || ! Hash::check($request->password, $usu->password)) {
@@ -36,7 +36,7 @@ Route::post('/tokens/create', function (Request $request) {
     }
     return response()->json([
         'usuario' => $usu,
-        'token' => $usu->createToken($request->token_name)->plainTextToken,
+        'token' => $usu->createToken($request->device)->plainTextToken,
     ]);
 });
 
