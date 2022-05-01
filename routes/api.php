@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\HorarioRecursoController;
+use App\Http\Controllers\ReservaController;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -45,4 +47,6 @@ Route::middleware(['auth:sanctum', 'allow.origin.all'])->group(function () {
     Route::get('/usuario', function (Request $request) {
         return $request->user();
     });
+    Route::resource('/horariosRecursos', HorarioRecursoController::class);
+    Route::resource('/reservas', ReservaController::class);
 });
