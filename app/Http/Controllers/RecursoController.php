@@ -14,7 +14,7 @@ class RecursoController extends Controller
      */
     public function index()
     {
-        $recursos = Recurso::all();
+        $recursos = Recurso::orderBy('nombre')->get();
         return response()->json($recursos);
     }
 

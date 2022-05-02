@@ -41,16 +41,18 @@ class HorarioRecursoController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->all();
-        if (empty($input['fecha'])){
-            $input['fecha'] = Carbon::today();
+        $lista = $request->all();
+        foreach ($lista as $hr_req) {
+            $hr = empty($hr_req['id']) ?
+                new HorarioRecurso :
+                HorarioRecurso::find($hr_req['id']);
+            $hr->fill($hr_req);
+            if (empty($hr->fecha)) {
+                $hr->fecha = Carbon::today();
+            }
+            $hr->save();
         }
-        $hr = empty($input['id']) ?
-            new HorarioRecurso :
-            HorarioRecurso::find($input['id']);
-        $hr->fill($input);
-        $hr->save();
-        return response()->json($hr);
+        return response()->json(['ok' => true]);
     }
 
     /**

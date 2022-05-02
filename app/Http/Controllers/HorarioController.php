@@ -14,7 +14,7 @@ class HorarioController extends Controller
      */
     public function index()
     {
-        $horarios = Horario::all();
+        $horarios = Horario::orderBy('hora_ini')->orderBy('hora_fin')->get();
         return response()->json($horarios);
     }
 
