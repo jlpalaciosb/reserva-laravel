@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\HorarioRecursoController;
+use App\Http\Controllers\RecursoController;
 use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\UsuarioController;
 use App\Models\Usuario;
@@ -50,6 +52,8 @@ Route::middleware(['auth:sanctum', 'allow.origin.all'])->group(function () {
     Route::get('/usuario', function (Request $request) {
         return $request->user();
     });
+    Route::resource('/horarios', HorarioController::class);
+    Route::resource('/recursos', RecursoController::class);
     Route::resource('/horariosRecursos', HorarioRecursoController::class);
     Route::resource('/reservas', ReservaController::class);
 });

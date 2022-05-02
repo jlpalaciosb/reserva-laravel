@@ -2,25 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\HorarioRecurso;
+use App\Models\Recurso;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 
-class HorarioRecursoController extends Controller
+class RecursoController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index(Request  $request)
+    public function index()
     {
-        $fecha = $request->input('fecha') ?: Carbon::today();
-        $lista = HorarioRecurso::with('horario', 'recurso', 'reservas')
-            ->where('fecha', $fecha)
-            ->get();
-        return response()->json($lista);
+        $recursos = Recurso::all();
+        return response()->json($recursos);
     }
 
     /**
@@ -41,16 +36,7 @@ class HorarioRecursoController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->all();
-        if (empty($input['fecha'])){
-            $input['fecha'] = Carbon::today();
-        }
-        $hr = empty($input['id']) ?
-            new HorarioRecurso :
-            HorarioRecurso::find($input['id']);
-        $hr->fill($input);
-        $hr->save();
-        return response()->json($hr);
+        //
     }
 
     /**
