@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HorarioRecursoController;
 use App\Http\Controllers\ReservaController;
+use App\Http\Controllers\UsuarioController;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -41,6 +42,8 @@ Route::post('/tokens/create', function (Request $request) {
         'token' => $usu->createToken($request->device)->plainTextToken,
     ]);
 });
+// ruta para crear usuario
+Route::post('/registro', [UsuarioController::class, 'store']);
 
 // en este grupo con middleware van todas las rutas autenticadas
 Route::middleware(['auth:sanctum', 'allow.origin.all'])->group(function () {
