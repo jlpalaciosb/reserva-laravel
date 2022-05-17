@@ -16,7 +16,12 @@ class HorarioRecursoController extends Controller
      */
     public function index(Request  $request)
     {
-        $fecha = $request->input('fecha') ?: Carbon::today();
+        $fecha = $request->input('fecha')
+            ? new Carbon($request->input('fecha'))
+            : Carbon::today();
+        if ($request->input('offset')) {
+            $fecha->addDays($request->input('offset'));
+        }
         $lista = HorarioRecurso::with('horario', 'recurso', 'reservas')
             ->where('fecha', $fecha)
             ->get();
@@ -43,13 +48,11 @@ class HorarioRecursoController extends Controller
     {
         $lista = $request->all();
         foreach ($lista as $hr_req) {
-            $hr = empty($hr_req['id']) ?
-                new HorarioRecurso :
-                HorarioRecurso::find($hr_req['id']);
+            $hr = HorarioRecurso::where('fecha', $hr_req['fecha'])
+                ->where('id_horario', $hr_req['id_horario'])
+                ->where('id_recurso', $hr_req['id_recurso'])
+                ->first() ?: new HorarioRecurso;
             $hr->fill($hr_req);
-            if (empty($hr->fecha)) {
-                $hr->fecha = Carbon::today();
-            }
             $hr->save();
         }
         return response()->json(['ok' => true]);
