@@ -18,7 +18,8 @@ class HorarioController extends Controller
         if ($request->input('sub_index') == 'all_activos') {
             return $this->index_all_activos($request);
         } else { // normal index
-            // horarios paginated
+            $length = 2;
+            return Horario::paginate($length);
         }
     }
 
@@ -29,7 +30,10 @@ class HorarioController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index_all_activos(Request $request) {
-        $horarios = Horario::orderBy('hora_ini')->orderBy('hora_fin')->get();
+        $horarios = Horario::where('activo', true)
+            ->orderBy('hora_ini')
+            ->orderBy('hora_fin')
+            ->get();
         return response()->json($horarios);
     }
 
