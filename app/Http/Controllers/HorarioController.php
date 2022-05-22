@@ -10,10 +10,25 @@ class HorarioController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->input('sub_index') == 'all_activos') {
+            return $this->index_all_activos($request);
+        } else { // normal index
+            // horarios paginated
+        }
+    }
+
+    /**
+     * Display a listing of all activos.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function index_all_activos(Request $request) {
         $horarios = Horario::orderBy('hora_ini')->orderBy('hora_fin')->get();
         return response()->json($horarios);
     }
