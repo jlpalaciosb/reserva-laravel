@@ -18,8 +18,16 @@ class HorarioController extends Controller
         if ($request->input('sub_index') == 'all_activos') {
             return $this->index_all_activos($request);
         } else { // normal index
-            $length = 2;
-            return Horario::paginate($length);
+            $length = 5;
+            $query = Horario::with([]);
+            if ($request->input('horaDesde')) {
+                $query->where('hora_ini', '>=', $request->input('horaDesde'));
+            }
+            if ($request->input('horaHasta')) {
+                $query->where('hora_fin', '<=', $request->input('horaHasta'));
+            }
+            $query->orderBy('hora_ini');
+            return $query->paginate($length);
         }
     }
 
@@ -55,7 +63,11 @@ class HorarioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nombre' => ['required', 'unique:App\Models\Horario,nombre' ],
+            'hora_ini' => ['required', 'lt:hora_fin'],
+            'hora_fin' => ['required'],
+        ]);
     }
 
     /**
@@ -66,7 +78,7 @@ class HorarioController extends Controller
      */
     public function show($id)
     {
-        //
+        return response()->json(Horario::find($id));
     }
 
     /**
