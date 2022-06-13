@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Recurso;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class RecursoController extends Controller
 {
@@ -18,10 +19,14 @@ class RecursoController extends Controller
         if ($request->input('sub_index') == 'all_activos') {
             return $this->index_all_activos($request);
         } else { // normal index
-            $length = 2;
-            return Recurso::paginate($length);
+            $length = 4;
+            $query = Recurso::with([]);
+            if ($request->input('nombre')) {
+                $query->where('nombre', 'ilike', '%' . $request->input('nombre') . '%');
+            }
+            $query->orderBy('nombre');
+            return $query->paginate($length);
         }
-        
     }
 
     /**
@@ -55,7 +60,13 @@ class RecursoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nombre' => ['required', 'unique:App\Models\Recurso,nombre' ],
+        ]);
+        $recurso = new Recurso();
+        $recurso->fill($request->all());
+        $recurso->save();
+        return response()->json($recurso);
     }
 
     /**
@@ -66,7 +77,7 @@ class RecursoController extends Controller
      */
     public function show($id)
     {
-        //
+        return response()->json(Recurso::find($id));
     }
 
     /**
@@ -89,7 +100,16 @@ class RecursoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'nombre' => [
+                'required',
+                Rule::unique('App\Models\Recurso', 'nombre')->ignore($id),
+            ],
+        ]);
+        $recurso = Recurso::find($id);
+        $recurso->fill($request->all());
+        $recurso->save();
+        return response()->json($recurso);
     }
 
     /**
