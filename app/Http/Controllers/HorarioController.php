@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Horario;
 use App\Models\HorarioRecurso;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -136,6 +137,18 @@ class HorarioController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $horario = Horario::find($id);
+            $horario->delete();
+            return response()->json([ 'id' => $id ]);
+        } catch (Exception $ex) {
+            if (str_contains($ex->getMessage(), 'Foreign key violation')) {
+                return response()->json([
+                    'message' => 'Ya tiene datos asociados!'
+                ], 400);
+            } else {
+                throw $ex;
+            }
+        }
     }
 }
