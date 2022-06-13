@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Horario;
+use App\Models\HorarioRecurso;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class HorarioController extends Controller
 {
@@ -65,9 +67,13 @@ class HorarioController extends Controller
     {
         $request->validate([
             'nombre' => ['required', 'unique:App\Models\Horario,nombre' ],
-            'hora_ini' => ['required', 'lt:hora_fin'],
+            'hora_ini' => ['required', 'before:hora_fin'],
             'hora_fin' => ['required'],
         ]);
+        $horario = new Horario();
+        $horario->fill($request->all());
+        $horario->save();
+        return response()->json($horario);
     }
 
     /**
@@ -101,7 +107,25 @@ class HorarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'nombre' => [
+                'required',
+                Rule::unique('App\Models\Horario', 'nombre')->ignore($id),
+            ],
+            'hora_ini' => ['required', 'before:hora_fin'],
+            'hora_fin' => ['required'],
+        ]);
+        // validar que no se uso todavia (que es nuevo)
+        $c = HorarioRecurso::where('id_horario', $id)->count();
+        if ($c > 0) {
+            return response()->json([
+                'message' => 'Solo se pueden editar los horarios nuevos.'
+            ], 400);
+        }
+        $horario = Horario::find($id);
+        $horario->fill($request->all());
+        $horario->save();
+        return response()->json($horario);
     }
 
     /**
