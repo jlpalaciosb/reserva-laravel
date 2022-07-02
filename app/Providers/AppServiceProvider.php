@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,7 +27,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         if (App::environment('production')) {
+            Log::info('con esquema https');
             URL::forceScheme('https');
+        } else {
+            Log::info('sin esquema https');
         }
     }
 }
