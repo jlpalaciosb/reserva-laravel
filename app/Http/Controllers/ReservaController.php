@@ -46,7 +46,7 @@ class ReservaController extends Controller
         // validate limit
         if (count($horarioRecurso->reservas) >= $horarioRecurso->limite) {
             return response()->json([
-                'message' => 'LLeno'
+                'message' => 'Límite alcanzado!'
             ], 400);
         }
 

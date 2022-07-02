@@ -20,7 +20,7 @@ class RecursoController extends Controller
         if ($request->input('sub_index') == 'all_activos') {
             return $this->index_all_activos($request);
         } else { // normal index
-            $length = 4;
+            $length = 5;
             $query = Recurso::with([]);
             if ($request->input('nombre')) {
                 $query->where('nombre', 'ilike', '%' . $request->input('nombre') . '%');

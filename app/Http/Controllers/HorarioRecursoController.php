@@ -16,15 +16,22 @@ class HorarioRecursoController extends Controller
      */
     public function index(Request  $request)
     {
+        // query param fecha
         $fecha = $request->input('fecha')
             ? new Carbon($request->input('fecha'))
             : Carbon::today();
+        
+        // query param offset es cantidad de dias a agregar a la fecha
+        // a listar, sirve xq es mas facil sumar fechas en el backend con
+        // carbon que en el frontend con js
         if ($request->input('offset')) {
             $fecha->addDays($request->input('offset'));
         }
+        
         $lista = HorarioRecurso::with('horario', 'recurso', 'reservas')
             ->where('fecha', $fecha)
             ->get();
+
         return response()->json($lista);
     }
 

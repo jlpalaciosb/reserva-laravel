@@ -21,7 +21,7 @@ class HorarioController extends Controller
         if ($request->input('sub_index') == 'all_activos') {
             return $this->index_all_activos($request);
         } else { // normal index
-            $length = 4;
+            $length = 5;
             $query = Horario::with([]);
             if ($request->input('horaDesde')) {
                 $query->where('hora_ini', '>=', $request->input('horaDesde'));
