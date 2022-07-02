@@ -26,11 +26,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if (App::environment('production')) {
-            Log::info('con esquema https');
-            URL::forceScheme('https');
-        } else {
-            Log::info('sin esquema https');
-        }
+        // if (App::environment('production')) {
+        //     Log::info('con esquema https');
+        //     URL::forceScheme('https');
+        // } else {
+        //     Log::info('sin esquema https');
+        // }
     }
 }
