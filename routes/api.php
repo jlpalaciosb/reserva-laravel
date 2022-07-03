@@ -33,7 +33,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // grupo de rutas SIN autenticacion
-Route::middleware(['allow.origin.all'])->group(function () {
+// Route::middleware(['allow.origin.all'])->group(function () {
     // ruta para crear token
     Route::post('/tokens/create', function (Request $request) {
         $request->validate([
@@ -65,4 +65,4 @@ Route::middleware(['allow.origin.all'])->group(function () {
     Route::resource('/recursos', RecursoController::class);
     Route::resource('/horariosRecursos', HorarioRecursoController::class);
     Route::resource('/reservas', ReservaController::class);
-});
+// });
