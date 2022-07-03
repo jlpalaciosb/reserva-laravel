@@ -37,7 +37,9 @@ Route::middleware(['allow.origin.all'])->group(function () {
             'password' => 'required',
             'device' => 'required',
         ]);
-        $usu = Usuario::where('username', $request->username)->first();
+        $usu = Usuario::where('username', $request->username)
+            ->orWhere('email', $request->username)
+            ->first();
         if (! $usu || ! Hash::check($request->password, $usu->password)) {
             throw ValidationException::withMessages([
                 'username' => ['Las credenciales proveídas son incorrectas.'],
