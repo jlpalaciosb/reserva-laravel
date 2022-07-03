@@ -54,10 +54,10 @@ Route::middleware(['allow.origin.all'])->group(function () {
     });
     // ruta para crear usuario
     Route::post('/registro', [UsuarioController::class, 'store']);
-});
+// });
 
-// grupo de rutas CON autenticacion
-Route::middleware(['auth:sanctum', 'allow.origin.all'])->group(function () {
+// // grupo de rutas CON autenticacion
+// Route::middleware(['auth:sanctum', 'allow.origin.all'])->group(function () {
     Route::get('/usuario', function (Request $request) {
         return $request->user();
     });
