@@ -17,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if (App::environment('production')) {
+        if (env('REDIRECT_HTTPS')) {
             Log::info('register con esquema https');
             $this->app['request']->server->set('HTTPS', true);
         } else {
@@ -32,9 +32,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(UrlGenerator $url)
     {
-        if (App::environment('production')) {
+        if (env('REDIRECT_HTTPS')) {
             Log::info('boot con esquema https');
-            // URL::forceScheme('https');
             $url->formatScheme('https://');
         } else {
             Log::info('sin esquema https');
