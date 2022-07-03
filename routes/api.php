@@ -33,7 +33,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // grupo de rutas SIN autenticacion
-// Route::middleware(['allow.origin.all'])->group(function () {
+Route::middleware(['allow.origin.all'])->group(function () {
     // ruta para crear token
     Route::post('/tokens/create', function (Request $request) {
         $request->validate([
@@ -54,10 +54,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     });
     // ruta para crear usuario
     Route::post('/registro', [UsuarioController::class, 'store']);
-// });
+});
 
-// // grupo de rutas CON autenticacion
-// Route::middleware(['auth:sanctum', 'allow.origin.all'])->group(function () {
+// grupo de rutas CON autenticacion
+Route::middleware(['auth:sanctum', 'allow.origin.all'])->group(function () {
     Route::get('/usuario', function (Request $request) {
         return $request->user();
     });
@@ -65,4 +65,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     Route::resource('/recursos', RecursoController::class);
     Route::resource('/horariosRecursos', HorarioRecursoController::class);
     Route::resource('/reservas', ReservaController::class);
-// });
+});
