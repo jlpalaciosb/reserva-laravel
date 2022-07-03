@@ -47,6 +47,9 @@ class UsuarioController extends Controller
         $usu = new Usuario;
         $usu->fill($request->all());
         $usu->password = Hash::make($usu->password); // hashear contraseña
+        if (Usuario::count() == 0) {
+            $usu->is_admin = true;
+        }
         $usu->save();
         return response()->json($usu);
     }

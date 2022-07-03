@@ -20,7 +20,6 @@ use Illuminate\Support\Facades\URL;
 // }
 
 Route::get('/', function () {
-    // return view('welcome');
-    return view('frontend');
+    return view('index');
 });
 
