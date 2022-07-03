@@ -3,9 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Routing\UrlGenerator;
 
 class AppServiceProvider extends ServiceProvider
@@ -34,7 +32,6 @@ class AppServiceProvider extends ServiceProvider
     {
         if (env('REDIRECT_HTTPS')) {
             Log::info('boot con esquema https');
-            $url->forceScheme('https');
             $url->formatScheme('https://');
         } else {
             Log::info('sin esquema https');

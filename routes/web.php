@@ -15,10 +15,6 @@ use Illuminate\Support\Facades\URL;
 |
 */
 
-if (env('REDIRECT_HTTPS')) {
-    URL::forceScheme('https');
-}
-
 Route::get('/', function () {
     return view('index');
 });
