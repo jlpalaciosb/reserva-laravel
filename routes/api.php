@@ -24,7 +24,7 @@ use Illuminate\Validation\ValidationException;
 |
 */
 
-// if (App::environment('production')) {
+// if (env('REDIRECT_HTTPS')) {
 //     URL::forceScheme('https');
 // }
 

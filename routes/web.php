@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\URL;
 |
 */
 
-// if (App::environment('production')) {
+// if (env('REDIRECT_HTTPS')) {
 //     URL::forceScheme('https');
 // }
 
