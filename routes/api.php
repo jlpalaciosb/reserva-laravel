@@ -7,10 +7,8 @@ use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\UsuarioController;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\ValidationException;
 
 /*
@@ -29,6 +27,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // grupo de rutas SIN autenticacion
+// TODO: AuthController
 Route::middleware(['allow.origin.all'])->group(function () {
     // ruta para crear token
     Route::post('/tokens/create', function (Request $request) {
@@ -57,10 +56,11 @@ Route::middleware(['allow.origin.all'])->group(function () {
 // grupo de rutas CON autenticacion
 Route::middleware(['auth:sanctum', 'allow.origin.all'])->group(function () {
     Route::get('/usuario', function (Request $request) {
-        return $request->user();
+        return $request->user(); // TODO: en AuthController
     });
+    Route::resource('/usuarios', UsuarioController::class);
     Route::resource('/horarios', HorarioController::class);
     Route::resource('/recursos', RecursoController::class);
-    Route::resource('/horariosRecursos', HorarioRecursoController::class);
+    Route::resource('/horarioRecursos', HorarioRecursoController::class);
     Route::resource('/reservas', ReservaController::class);
 });

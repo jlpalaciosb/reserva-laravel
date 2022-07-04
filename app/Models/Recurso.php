@@ -10,6 +10,6 @@ class Recurso extends Model
     use HasFactory;
     
     protected $fillable = [
-        'nombre'
+        'nombre', 'activo'
     ];
 }

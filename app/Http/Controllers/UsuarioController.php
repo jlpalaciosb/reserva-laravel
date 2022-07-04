@@ -11,11 +11,15 @@ class UsuarioController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $per_page = $request->input('per_page') ?: 5;
+        $query = Usuario::with([]);
+        $query->orderBy('username');
+        return $query->paginate($per_page);
     }
 
     /**
@@ -29,6 +33,7 @@ class UsuarioController extends Controller
     }
 
     /**
+     * Se usa para el registro de usuarios.
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -48,7 +53,9 @@ class UsuarioController extends Controller
         $usu->fill($request->all());
         $usu->password = Hash::make($usu->password); // hashear contraseña
         if (Usuario::count() == 0) {
-            $usu->is_admin = true;
+            $usu->is_admin = true; // para q el 1er usuario sea admin
+        } else {
+            $usu->is_admin = false; // TODO: authorize to admin users
         }
         $usu->save();
         return response()->json($usu);
@@ -57,21 +64,21 @@ class UsuarioController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Usuario  $usuario
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Usuario $usuario)
     {
-        //
+        return response()->json($usuario);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Usuario  $usuario
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Usuario $usuario)
     {
         //
     }
@@ -80,22 +87,22 @@ class UsuarioController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Usuario  $usuario
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Usuario $usuario)
     {
-        //
+        // TODO
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Usuario  $usuario
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Usuario $usuario)
     {
-        //
+        // TODO
     }
 }

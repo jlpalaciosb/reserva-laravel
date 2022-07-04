@@ -18,34 +18,19 @@ class HorarioController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->input('sub_index') == 'all_activos') {
-            return $this->index_all_activos($request);
-        } else { // normal index
-            $length = 5;
-            $query = Horario::with([]);
-            if ($request->input('horaDesde')) {
-                $query->where('hora_ini', '>=', $request->input('horaDesde'));
-            }
-            if ($request->input('horaHasta')) {
-                $query->where('hora_fin', '<=', $request->input('horaHasta'));
-            }
-            $query->orderBy('hora_ini');
-            return $query->paginate($length);
+        $per_page = $request->input('per_page') ?: 5;
+        $query = Horario::with([]);
+        if ($request->input('hora_desde')) {
+            $query->where('hora_ini', '>=', $request->input('hora_desde'));
         }
-    }
-
-    /**
-     * Display a listing of all activos.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function index_all_activos(Request $request) {
-        $horarios = Horario::where('activo', true)
-            ->orderBy('hora_ini')
-            ->orderBy('hora_fin')
-            ->get();
-        return response()->json($horarios);
+        if ($request->input('hora_hasta')) {
+            $query->where('hora_fin', '<=', $request->input('hora_hasta'));
+        }
+        if ($request->input('activo') === '0' || $request->input('activo') === '1') {
+            $query->where('activo', (bool)$request->input('activo'));
+        }
+        $query->orderBy('hora_ini');
+        return $query->paginate($per_page);
     }
 
     /**
@@ -80,21 +65,21 @@ class HorarioController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Horario  $horario
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Horario $horario)
     {
-        return response()->json(Horario::find($id));
+        return response()->json($horario);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Horario  $horario
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Horario $horario)
     {
         //
     }
@@ -103,27 +88,27 @@ class HorarioController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Horario  $horario
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Horario $horario)
     {
         $request->validate([
             'nombre' => [
                 'required',
-                Rule::unique('App\Models\Horario', 'nombre')->ignore($id),
+                Rule::unique('App\Models\Horario', 'nombre')->ignore($horario->id),
             ],
             'hora_ini' => ['required', 'before:hora_fin'],
             'hora_fin' => ['required'],
         ]);
         // validar que no se uso todavia (que es nuevo)
-        $c = HorarioRecurso::where('id_horario', $id)->count();
+        $c = HorarioRecurso::where('id_horario', $horario->id)->count();
         if ($c > 0) {
             return response()->json([
                 'message' => 'Solo se pueden editar los horarios nuevos.'
             ], 400);
         }
-        $horario = Horario::find($id);
+        // ok, update
         $horario->fill($request->all());
         $horario->save();
         return response()->json($horario);
@@ -132,15 +117,14 @@ class HorarioController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Horario  $horario
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Horario $horario)
     {
         try {
-            $horario = Horario::find($id);
             $horario->delete();
-            return response()->json([ 'id' => $id ]);
+            return response()->json([]); // ok
         } catch (Exception $ex) {
             if (str_contains($ex->getMessage(), 'Foreign key violation')) {
                 return response()->json([

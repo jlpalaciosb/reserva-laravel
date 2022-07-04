@@ -17,30 +17,16 @@ class RecursoController extends Controller
      */
     public function index(Request  $request)
     {
-        if ($request->input('sub_index') == 'all_activos') {
-            return $this->index_all_activos($request);
-        } else { // normal index
-            $length = 5;
-            $query = Recurso::with([]);
-            if ($request->input('nombre')) {
-                $query->where('nombre', 'ilike', '%' . $request->input('nombre') . '%');
-            }
-            $query->orderBy('nombre');
-            return $query->paginate($length);
+        $per_page = $request->input('per_page') ?: 5;
+        $query = Recurso::with([]);
+        if ($request->input('nombre')) {
+            $query->where('nombre', 'ilike', '%' . $request->input('nombre') . '%');
         }
-    }
-
-    /**
-     * Display a listing of all activos.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function index_all_activos(Request $request) {
-        $recursos = Recurso::where('activo', true)
-            ->orderBy('nombre')
-            ->get();
-        return response()->json($recursos);
+        if ($request->input('activo') === '0' || $request->input('activo') === '1') {
+            $query->where('activo', (bool)$request->input('activo'));
+        }
+        $query->orderBy('nombre');
+        return $query->paginate($per_page);
     }
 
     /**
@@ -73,21 +59,21 @@ class RecursoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Recurso  $recurso
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Recurso $recurso)
     {
-        return response()->json(Recurso::find($id));
+        return response()->json($recurso);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Recurso  $recurso
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Recurso $recurso)
     {
         //
     }
@@ -96,18 +82,18 @@ class RecursoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Recurso  $recurso
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Recurso $recurso)
     {
         $request->validate([
             'nombre' => [
                 'required',
-                Rule::unique('App\Models\Recurso', 'nombre')->ignore($id),
+                Rule::unique('App\Models\Recurso', 'nombre')->ignore($recurso->id),
             ],
         ]);
-        $recurso = Recurso::find($id);
+        // ok, update
         $recurso->fill($request->all());
         $recurso->save();
         return response()->json($recurso);
@@ -116,15 +102,14 @@ class RecursoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Recurso  $recurso
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Recurso $recurso)
     {
         try {
-            $recurso = Recurso::find($id);
             $recurso->delete();
-            return response()->json([ 'id' => $id ]);
+            return response()->json([]); // ok
         } catch (Exception $ex) {
             if (str_contains($ex->getMessage(), 'Foreign key violation')) {
                 return response()->json([

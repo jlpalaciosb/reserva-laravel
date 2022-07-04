@@ -47,7 +47,8 @@ class HorarioRecursoController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
+     * TODO: separar con update
+     * 
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -68,21 +69,21 @@ class HorarioRecursoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\HorarioRecurso  $horarioRecurso
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(HorarioRecurso $horarioRecurso)
     {
-        //
+        return response()->json($horarioRecurso);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\HorarioRecurso  $horarioRecurso
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(HorarioRecurso $horarioRecurso)
     {
         //
     }
@@ -91,21 +92,21 @@ class HorarioRecursoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\HorarioRecurso  $horarioRecurso
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, HorarioRecurso $horarioRecurso)
     {
-        //
+        // TODO
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\HorarioRecurso  $horarioRecurso
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(HorarioRecurso $horarioRecurso)
     {
         //
     }
