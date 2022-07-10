@@ -18,6 +18,9 @@ class UsuarioController extends Controller
     {
         $per_page = $request->input('per_page') ?: 5;
         $query = Usuario::with([]);
+        if ($request->input('me') === '1') {
+            $query->where('id', $request->user()->id);
+        }
         $query->orderBy('username');
         return $query->paginate($per_page);
     }
@@ -33,7 +36,6 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Se usa para el registro de usuarios.
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -41,24 +43,7 @@ class UsuarioController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'username' => ['required', 'unique:App\Models\Usuario,username' ],
-            'password' => 'required',
-            'confirm' => ['required', 'same:password'],
-            'nombre' => 'required',
-            'apellido' => 'required',
-            'email' => [ 'required', 'email', 'unique:App\Models\Usuario,email' ],
-        ]);
-        $usu = new Usuario;
-        $usu->fill($request->all());
-        $usu->password = Hash::make($usu->password); // hashear contraseña
-        if (Usuario::count() == 0) {
-            $usu->is_admin = true; // para q el 1er usuario sea admin
-        } else {
-            $usu->is_admin = false; // TODO: authorize to admin users
-        }
-        $usu->save();
-        return response()->json($usu);
+        // se crea nuevos usuarios con /api/registro solamente
     }
 
     /**
