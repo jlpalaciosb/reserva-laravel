@@ -16,11 +16,11 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         if (env('REDIRECT_HTTPS')) {
-            Log::info('register con esquema https');
+            Log::info('register https');
             $this->app['request']->server->set('HTTPS', true);
-        } else {
+        } /* else {
             Log::info('register sin esquema https');
-        }
+        } */
     }
 
     /**
@@ -31,10 +31,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(UrlGenerator $url)
     {
         if (env('REDIRECT_HTTPS')) {
-            Log::info('boot con esquema https');
+            Log::info('boot https');
             $url->formatScheme('https://');
-        } else {
+        } /* else {
             Log::info('sin esquema https');
-        }
+        } */
     }
 }

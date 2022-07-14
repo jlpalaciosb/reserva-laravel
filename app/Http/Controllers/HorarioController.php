@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SaveHorarioRequest;
 use App\Models\Horario;
 use App\Models\HorarioRecurso;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class HorarioController extends Controller
 {
@@ -46,18 +46,14 @@ class HorarioController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  SaveHorarioRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SaveHorarioRequest $request)
     {
-        $request->validate([
-            'nombre' => ['required', 'unique:App\Models\Horario,nombre' ],
-            'hora_ini' => ['required', 'before:hora_fin'],
-            'hora_fin' => ['required'],
-        ]);
+        $input = $request->validated();
         $horario = new Horario();
-        $horario->fill($request->all());
+        $horario->fill($input);
         $horario->save();
         return response()->json($horario);
     }
@@ -87,29 +83,14 @@ class HorarioController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  SaveHorarioRequest  $request
      * @param  \App\Models\Horario  $horario
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Horario $horario)
+    public function update(SaveHorarioRequest $request, Horario $horario)
     {
-        $request->validate([
-            'nombre' => [
-                'required',
-                Rule::unique('App\Models\Horario', 'nombre')->ignore($horario->id),
-            ],
-            'hora_ini' => ['required', 'before:hora_fin'],
-            'hora_fin' => ['required'],
-        ]);
-        // validar que no se uso todavia (que es nuevo)
-        $c = HorarioRecurso::where('id_horario', $horario->id)->count();
-        if ($c > 0) {
-            return response()->json([
-                'message' => 'Solo se pueden editar los horarios nuevos.'
-            ], 400);
-        }
-        // ok, update
-        $horario->fill($request->all());
+        $input = $request->validated();
+        $horario->fill($input);
         $horario->save();
         return response()->json($horario);
     }
