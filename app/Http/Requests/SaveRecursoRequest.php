@@ -19,7 +19,7 @@ class SaveRecursoRequest extends FormRequest
     protected ?Recurso $recurso = null;
 
     /**
-     * En este metodo seteamos los atributos
+     * set $this->recurso
      */
     public function setRouteResolver(\Closure $callback)
     {
