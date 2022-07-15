@@ -20,7 +20,7 @@ class SaveHorarioRequest extends FormRequest
     private ?Horario $horario = null;
 
     /**
-     * En este metodo seteamos los atributos
+     * set $this->horario
      */
     public function setRouteResolver(\Closure $callback)
     {
