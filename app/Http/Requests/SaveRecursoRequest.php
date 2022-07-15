@@ -2,22 +2,21 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Horario;
-use App\Models\HorarioRecurso;
+use App\Models\Recurso;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
- * Request para horario store & update
+ * Request para recurso store & update
  */
-class SaveHorarioRequest extends FormRequest
+class SaveRecursoRequest extends FormRequest
 {
 
     /**
-     * Updating Horario instance, null on store
+     * Updating Recurso instance, null on store
      */
-    private ?Horario $horario = null;
+    protected ?Recurso $recurso = null;
 
     /**
      * En este metodo seteamos los atributos
@@ -25,7 +24,7 @@ class SaveHorarioRequest extends FormRequest
     public function setRouteResolver(\Closure $callback)
     {
         parent::setRouteResolver(...func_get_args());
-        $this->horario = $this->route('horario');
+        $this->recurso = $this->route('recurso');
     }
 
     /**
@@ -36,13 +35,6 @@ class SaveHorarioRequest extends FormRequest
      */
     public function authorize()
     {
-        if (isset($this->horario)) {
-            // verificar que el horario no se uso todavia
-            $c = HorarioRecurso::where('id_horario', $this->horario->id)->count();
-            if ($c > 0) {
-                throw new HttpException(400, 'Solo se pueden editar los horarios nuevos');
-            }
-        }
         return $this->user()->is_admin;
     }
 
@@ -56,15 +48,8 @@ class SaveHorarioRequest extends FormRequest
         return [
             'nombre' => [
                 'required',
-                Rule::unique('App\Models\Horario', 'nombre')
-                    ->ignore($this->horario->id ?? null),
-            ],
-            'hora_ini' => [
-                'required',
-                'before:hora_fin',
-            ],
-            'hora_fin' => [
-                'required',
+                Rule::unique('App\Models\Recurso', 'nombre')
+                    ->ignore($this->recurso->id ?? null),
             ],
         ];
     }

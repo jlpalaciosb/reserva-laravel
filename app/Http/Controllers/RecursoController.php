@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SaveRecursoRequest;
 use App\Models\Recurso;
 use Exception;
 use Illuminate\Http\Request;
@@ -42,16 +43,14 @@ class RecursoController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  SaveRecursoRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SaveRecursoRequest $request)
     {
-        $request->validate([
-            'nombre' => ['required', 'unique:App\Models\Recurso,nombre' ],
-        ]);
+        $input = $request->validated();
         $recurso = new Recurso();
-        $recurso->fill($request->all());
+        $recurso->fill($input);
         $recurso->save();
         return response()->json($recurso);
     }
@@ -81,20 +80,14 @@ class RecursoController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  SaveRecursoRequest  $request
      * @param  \App\Models\Recurso  $recurso
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Recurso $recurso)
+    public function update(SaveRecursoRequest $request, Recurso $recurso)
     {
-        $request->validate([
-            'nombre' => [
-                'required',
-                Rule::unique('App\Models\Recurso', 'nombre')->ignore($recurso->id),
-            ],
-        ]);
-        // ok, update
-        $recurso->fill($request->all());
+        $input = $request->validated();
+        $recurso->fill($input);
         $recurso->save();
         return response()->json($recurso);
     }
