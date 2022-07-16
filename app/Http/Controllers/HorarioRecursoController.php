@@ -46,8 +46,8 @@ class HorarioRecursoController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     * TODO: separar con update
+     * Guardar horario-recurso
+     * Esto crea o actualiza una instancia
      * 
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -97,7 +97,7 @@ class HorarioRecursoController extends Controller
      */
     public function update(Request $request, HorarioRecurso $horarioRecurso)
     {
-        // TODO
+        //
     }
 
     /**

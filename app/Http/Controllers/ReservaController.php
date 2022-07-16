@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SaveReservaRequest;
 use App\Models\HorarioRecurso;
 use App\Models\Reserva;
 use Illuminate\Http\Request;
@@ -37,34 +38,12 @@ class ReservaController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  SaveReservaRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SaveReservaRequest $request)
     {
-        $input = $request->all();
-        $input['id_usuario'] = Auth::user()->id;
-        $horarioRecurso = HorarioRecurso::with('reservas')
-            ->find($input['id_horario_recurso']);
-        
-        // validate limit
-        if (count($horarioRecurso->reservas) >= $horarioRecurso->limite) {
-            return response()->json([
-                'message' => 'Límite alcanzado!'
-            ], 400);
-        }
-
-        // validate user
-        $count = Reserva::where('id_usuario', $input['id_usuario'])
-            ->where('id_horario_recurso', $input['id_horario_recurso'])
-            ->count();
-        if ($count > 0) {
-            return response()->json([
-                'message' => 'Usted ya reservó este lugar'
-            ], 400);
-        }
-
-        // ok reservar
+        $input = $request->validated();
         $reserva = new Reserva;
         $reserva->fill($input);
         $reserva->save();
