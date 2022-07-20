@@ -31,7 +31,7 @@ Route::middleware(['allow.origin.all'])->group(function () {
 });
 
 // grupo de rutas CON autenticacion
-Route::middleware(['auth:sanctum', 'allow.origin.all'])->group(function () {
+Route::middleware(['auth:sanctum', 'verified', 'allow.origin.all'])->group(function () {
     Route::resource('/usuarios', UsuarioController::class);
     Route::resource('/horarios', HorarioController::class);
     Route::resource('/recursos', RecursoController::class);
