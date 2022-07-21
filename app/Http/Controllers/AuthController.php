@@ -3,13 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Usuario;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\DB;
-use Throwable;
 
 class AuthController extends Controller
 {
@@ -31,26 +27,16 @@ class AuthController extends Controller
             'apellido' => 'required',
             'email' => [ 'required', 'email', 'unique:App\Models\Usuario,email' ],
         ]);
-
-        DB::beginTransaction();
-        try {
-            $usu = new Usuario;
-            $usu->fill($request->all());
-            $usu->password = Hash::make($usu->password); // hashear contraseña
-            if (Usuario::count() == 0) {
-                $usu->is_admin = true; // para q el 1er usuario sea admin
-            } else {
-                $usu->is_admin = false;
-            }
-            $usu->save();
-
-            event(new Registered($usu));
-            DB::commit();
-            return response()->json($usu);
-        } catch (Throwable $th) {
-            DB::rollBack();
-            throw $th;
+        $usu = new Usuario;
+        $usu->fill($request->all());
+        $usu->password = Hash::make($usu->password); // hashear contraseña
+        if (Usuario::count() == 0) {
+            $usu->is_admin = true; // para q el 1er usuario sea admin
+        } else {
+            $usu->is_admin = false;
         }
+        $usu->save();
+        return response()->json($usu);
     }
 
     /**
