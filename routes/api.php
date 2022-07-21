@@ -19,11 +19,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// hacer esto con /api/usuarios?me=1
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
 // grupo de rutas SIN autenticacion
 Route::middleware(['allow.origin.all'])->group(function () {
     Route::post('/registro', [AuthController::class, 'registro']);

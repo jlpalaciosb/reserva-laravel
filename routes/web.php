@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\URL;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +13,7 @@ use Illuminate\Support\Facades\URL;
 |
 */
 
+// retorna frontend compilado
 Route::get('/', function () {
     return view('index');
 });
-
