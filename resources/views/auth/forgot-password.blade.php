@@ -1,44 +1,41 @@
 @extends('layouts.guest')
 
 @section('content')
-    <p>¿Olvidaste tu contraseña? No hay problema. Simplemente háganos saber su dirección de correo electrónico y le enviaremos un enlace de restablecimiento de contraseña que le permitirá elegir una nueva!</p>
-@endsection
-
-{{--
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
-
-        <div class="mb-4 text-sm text-gray-600">
-            {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+    <div>
+        <h1 class="mt-3 mb-3">
+            Restablecer contraseña
+        </h1>
+        <p>¿Olvidaste tu contraseña? No hay problema. Simplemente háganos saber su dirección de correo electrónico y le enviaremos un enlace de restablecimiento de contraseña que le permitirá elegir una nueva!</p>
+        <div>
+            @if (session('status'))
+                <p class="text-success">
+                    {{ session('status') }}
+                </p>
+            @endif
+            @if ($errors->any())
+                <ul class="text-danger">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            @endif
         </div>
-
-        <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
-
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
-
         <form method="POST" action="{{ route('password.email') }}">
             @csrf
-
-            <!-- Email Address -->
-            <div>
-                <x-label for="email" :value="__('Email')" />
-
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+            <div class="row form-group">
+                <div class="col-12 col-lg-4">
+                    <label for="email">
+                        Email <span class="text-danger">*</span>
+                    </label>
+                    <input id="email" type="email" name="email" class="form-control"
+                    value="{{ old('email') }}" required autofocus>
+                </div>
             </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <x-button>
-                    {{ __('Email Password Reset Link') }}
-                </x-button>
+            <div>
+                <button class="btn btn-primary mr-3" type="submit">
+                    <i class="fas fa-envelope"></i> Enviar
+                </button>
             </div>
         </form>
-    </x-auth-card>
-</x-guest-layout>
---}}
+    </div>
+@endsection

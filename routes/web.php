@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\NewPasswordController;
 use App\Http\Controllers\PasswordResetLinkController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,9 +15,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// retorna frontend compilado
+// retorna app frontend vue compilado
 Route::get('/', function () {
     return view('index');
 });
 
+// Rutas para reseteo de password
 Route::get('/forgot-password', [PasswordResetLinkController::class, 'create']);
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+    ->name('password.email');
+Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+    ->name('password.reset');
+Route::post('/reset-password', [NewPasswordController::class, 'store'])
+    ->name('password.update');
