@@ -19,16 +19,29 @@ class AuthController extends Controller
      */
     public function registro(Request $request)
     {
+        // $request->validate([
+        //     'username' => ['required', 'unique:App\Models\Usuario,username' ],
+        //     'password' => 'required',
+        //     'confirm' => ['required', 'same:password'],
+        //     'nombre' => 'required',
+        //     'apellido' => 'required',
+        //     'email' => [ 'required', 'email', 'unique:App\Models\Usuario,email' ],
+        // ]);
+
+        // simplificar request
         $request->validate([
-            'username' => ['required', 'unique:App\Models\Usuario,username' ],
+            'nombre_completo' => 'required',
+            'email' => [ 'required', 'email', 'unique:App\Models\Usuario,email' ],
             'password' => 'required',
             'confirm' => ['required', 'same:password'],
-            'nombre' => 'required',
-            'apellido' => 'required',
-            'email' => [ 'required', 'email', 'unique:App\Models\Usuario,email' ],
         ]);
+        $input = $request->all();
+        $input['username'] = Usuario::genUsername($input['nombre_completo']);
+        $input['nombre'] = Usuario::genNombre($input['nombre_completo']);
+        $input['apellido'] = Usuario::genApellido($input['nombre_completo']);
+
         $usu = new Usuario;
-        $usu->fill($request->all());
+        $usu->fill($input);
         $usu->password = Hash::make($usu->password); // hashear contraseña
         if (Usuario::count() == 0) {
             $usu->is_admin = true; // para q el 1er usuario sea admin

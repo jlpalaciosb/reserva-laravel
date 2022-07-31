@@ -49,4 +49,47 @@ class Usuario extends User
     {
         return $this->hasMany(Reserva::class, 'id_usuario', 'id');
     }
+
+    /**
+     * Genera username a partir de nombre completo
+     * Ejemplo: in: José Palacios, out: josé_palacios
+     * @param string $nombre_completo
+     */
+    public static function genUsername($nombre_completo) {
+        $nombre_completo = mb_strtolower($nombre_completo);
+        $aux = preg_split("/\s+/", $nombre_completo);
+        $nombre = $aux[0];
+        $apellido = $aux[1] ?? '';
+        $username = $nombre . '_' . $apellido;
+
+        // $username debe ser unique en tabla usuarios
+        $aux = 2;
+        while (Usuario::where('username', $username)->count() != 0) {
+            $username = $nombre . '_' . $apellido . '_' . $aux++;
+        }
+
+        return $username;
+    }
+
+    /**
+     * Genera nombre a partir de nombre completo
+     * Ejemplo: in: José Palacios, out: José
+     * @param string $nombre_completo
+     */
+    public static function genNombre($nombre_completo) {
+        $aux = preg_split("/\s+/", $nombre_completo);
+        $nombre = $aux[0];
+        return $nombre;
+    }
+
+    /**
+     * Genera apellido a partir de nombre completo
+     * Ejemplo: in: José Palacios, out: Palacios
+     * @param string $nombre_completo
+     */
+    public static function genApellido($nombre_completo) {
+        $aux = preg_split("/\s+/", $nombre_completo);
+        $apellido = $aux[1] ?? '';
+        return $apellido;
+    }
 }
