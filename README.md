@@ -24,11 +24,11 @@ Este repositorio corresponde la backend de la aplicación, fue desarrollado con 
 - Rutas protegidas por middleware.
 - Servicio web de html, css y js del [frontend](https://github.com/jlpalaciosb/reserva-vue) compilado.
 
-# Frontend
+## Frontend
 
 https://github.com/jlpalaciosb/reserva-vue
 
-# Instalación
+## Instalación
 
 `php composer.phar install`
 
