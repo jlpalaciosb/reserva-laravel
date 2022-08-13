@@ -10,7 +10,7 @@ https://reservasya.herokuapp.com
 
 ## Características
 
-Este repositorio corresponde la backend de la aplicación, fue desarrollado con las siguientes teconologías:
+Este repositorio corresponde al backend de la aplicación, fue desarrollado con las siguientes teconologías:
 
 - Framework Laravel v8 y lenguaje PHP v7.4.
 - Base de datos Postgres v12.
