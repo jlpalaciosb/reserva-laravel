@@ -1,4 +1,26 @@
+/**
+ * Estilos globales de la app
+ */
 
+/* cursor pointer */
 .cpointer {
     cursor: pointer;
+}
+
+/* estilo inputs en modo oscuro */
+.bg-dark .form-control {
+    background-color: var(--secondary);
+    color: white;
+}
+.bg-dark .form-control:not(.is-invalid) {
+    border-color: rgba(0, 0, 0, 0.1);
+    border-width: 1px;
+}
+.table-dark .form-control {
+    background-color: var(--secondary);
+    color: white;
+}
+.table-dark .form-control:not(.is-invalid) {
+    border-color: rgba(0, 0, 0, 0.1);
+    border-width: 1px;
 }
