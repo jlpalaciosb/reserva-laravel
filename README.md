@@ -1,19 +1,15 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="public/images/logo-color.png" width="300"></a></p>
+<p align="center"><img src="public/images/logo-color.png" width="300"></p>
 
 ## Acerca de ReservasYa
 
 ReservasYa es una aplicación web donde los usuarios pueden reservar recursos limitados. El usuario administrador gestiona los recursos y horarios reservables.
 
-## Demo
-
-https://reservasya.herokuapp.com
-
 ## Características
 
-Este repositorio corresponde al backend de la aplicación, fue desarrollado con las siguientes teconologías:
+Este repositorio corresponde al backend de la aplicación, fue desarrollado con las siguientes tecnologías:
 
 - Framework Laravel v8 y lenguaje PHP v7.4.
-- Base de datos Postgres v12.
+- Base de datos Postgres v12 o mayor.
 - Migrations y modelos relacionados. ORM Eloquent, agnóstico de la BD utilizada.
 - Api JSON tipo REST
 - Autenticacion básica por token, implementado con laravel sanctum.
@@ -22,18 +18,22 @@ Este repositorio corresponde al backend de la aplicación, fue desarrollado con 
 - Usuarios administradores y normales.
 - Recuperación de contraseña olvidada.
 - Rutas protegidas por middleware.
-- Servicio web de html, css y js del [frontend](https://github.com/jlpalaciosb/reserva-vue) compilado.
+- Servicio web de html, css y js del frontend compilado.
 
-## Frontend
-
-https://github.com/jlpalaciosb/reserva-vue
+El frontend se encuentra en [jlpalaciosb/reserva-vue](https://github.com/jlpalaciosb/reserva-vue).
 
 ## Instalación
 
-`php composer.phar install`
+- `cp .env.example .env`
 
-`php artisan migrate`
+- `composer install`
 
-`php artisan db:seed`
+- `php artisan key:generate`
 
-`php artisan serve`
+- Cree una base de datos postgres y establezca sus credenciales en el archivo .env.
+
+- `php artisan migrate`
+
+- `php artisan db:seed`
+
+- `php artisan serve`
